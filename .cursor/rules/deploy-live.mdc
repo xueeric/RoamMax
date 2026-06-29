@@ -1,0 +1,15 @@
+---
+description: Deploy website to production VPS when user asks to push or go live
+alwaysApply: true
+---
+
+# Push to live
+
+When the user says **push to live**, **deploy**, **go live**, **push the update to live**, or similar:
+
+1. Open and follow **[docs/DEPLOY.md](docs/DEPLOY.md)** — execute the checklist, do not only summarize it.
+2. Run `./deploy-sj.sh` from the repo root unless the user asked for a dry-run or pre-flight only.
+3. Never upload `.env` or production SQLite (`data/*.db`). The deploy script excludes these by design.
+4. After deploy, verify `https://roammax.ca` and report success or failure with curl/SSH output.
+
+If deploy fails, diagnose (missing `.deployignore`, SSH/VPN, rsync errors) and fix before retrying.

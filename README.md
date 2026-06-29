@@ -52,6 +52,7 @@ Set `SQUARE_ACCESS_TOKEN` + `SQUARE_LOCATION_ID` in `.env` for real sandbox chec
 
 | Document | Purpose |
 | --- | --- |
+| [docs/DEPLOY.md](docs/DEPLOY.md) | **Push to production** — agent runbook for `roammax.ca` |
 | [docs/BASELINE.md](docs/BASELINE.md) | Product vision, features, business rules, architecture |
 | [docs/DATA-MODEL.md](docs/DATA-MODEL.md) | SQLite schema, availability & assignment logic |
 | [docs/ROADMAP.md](docs/ROADMAP.md) | Phased build plan |
