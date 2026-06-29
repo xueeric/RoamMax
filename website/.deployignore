@@ -1,0 +1,7 @@
+# Exclude when uploading website/ to VPS (rsync: --exclude-from=website/.deployignore)
+.env
+data/*.db
+data/*.db-wal
+data/*.db-shm
+data/*.db-journal
+data/*.log
