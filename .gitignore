@@ -1,0 +1,40 @@
+# macOS / Synology
+.DS_Store
+Icon?
+Icon
+.SynologyWorkingDirectory/
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+dev/.env
+website/.env
+
+# SQLite databases & WAL
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+
+# Runtime / generated data
+website/data/*.log
+website/data/rate-limits/
+website/data/preview-*.html
+website/data/deposit-cron.last.json
+
+# Dev logs & local tunnel config
+dev/logs/
+dev/cloudflare/config.yml
+
+# Node (design prototype)
+node_modules/
+dist/
+design/node_modules/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*~

@@ -1,0 +1,12 @@
+# Copy to config.yml after running dev/bin/cloudflare-tunnel-setup.sh
+#
+# tunnel: use the tunnel name from `cloudflared tunnel create roammax-dev`
+# credentials-file: path printed by setup (usually ~/.cloudflared/<TUNNEL_UUID>.json)
+
+tunnel: roammax-dev
+credentials-file: /Users/YOUR_USER/.cloudflared/TUNNEL_UUID.json
+
+ingress:
+  - hostname: dev.roammax.ca
+    service: http://127.0.0.1:8080
+  - service: http_status:404

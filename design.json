@@ -1,0 +1,573 @@
+{
+  "$schema": "starlink-design-system-v1",
+  "meta": {
+    "project": "RoamMax (roammax.ca)",
+    "version": "1.0.0",
+    "purpose": "High-level creative and UI guidelines so AI and developers can replicate the Starlink rental portal look consistently across static HTML, PHP templates, and React.",
+    "contentNote": "Sample copy, kit names, and pricing shown in this file and in reference components are layout placeholders only. Product scope, rates, and inventory come from docs/BASELINE.md and the rental agreement — not from design.json.",
+    "referenceImplementation": "design/",
+    "previewCommand": "./preview-design.sh",
+    "lastUpdated": "2026-05-22"
+  },
+
+  "creativeDirection": {
+    "oneLineBrief": "A precision logistics portal disguised as a consumer rental site — calm, monochrome, data-forward.",
+    "personality": [
+      "Operational and trustworthy, not playful or startup-cute",
+      "Minimal color — black, white, and gray carry 90% of the UI",
+      "Satellite / logistics metaphor: orbital, constellation, telemetry, dispatch",
+      "Dense information presented with generous whitespace and clear hierarchy",
+      "Feels like mission control or a premium shipping dashboard, not a marketing landing page"
+    ],
+    "visualMetaphor": "Mission-control booking console for satellite hardware — numbered steps, mono labels, live status pulses, receipt-style summaries.",
+    "avoid": [
+      "Bright blue marketing hero gradients (old landing-page style)",
+      "Rounded-full pill CTAs as the default primary action (use rounded-xl instead)",
+      "Stock photo heroes or illustration-heavy marketing blocks",
+      "Generic SaaS purple gradients or glassmorphism overload",
+      "Overly casual copy or emoji-heavy UI"
+    ]
+  },
+
+  "designPrinciples": [
+    {
+      "name": "Monochrome first",
+      "rule": "Black (#000) is the primary brand color. Accent blue (#2563eb) appears sparingly — monthly pricing highlights, links, optional emphasis only. Success uses emerald; warnings use amber; errors use red."
+    },
+    {
+      "name": "Three-font system",
+      "rule": "Space Grotesk for display headlines, Inter for body and UI, JetBrains Mono for labels, IDs, prices, timestamps, and technical metadata."
+    },
+    {
+      "name": "Cards on a soft canvas",
+      "rule": "Page background is off-white (#f9fafb). All content lives in white cards with thin gray borders — never floating elements without a border or subtle shadow."
+    },
+    {
+      "name": "Uppercase mono labels",
+      "rule": "Section prefixes, step numbers, and metadata use 9–10px uppercase JetBrains Mono with wide letter-spacing. This is the signature 'control panel' look."
+    },
+    {
+      "name": "Progressive disclosure",
+      "rule": "Multi-step booking flows, expandable FAQ, collapsible kit specs. Show summary first; details on demand."
+    },
+    {
+      "name": "State is visible",
+      "rule": "Calendar blocked dates, booking status badges, live pulse dots, and disabled submit buttons must communicate system state clearly without tooltips alone."
+    },
+    {
+      "name": "Mobile-first, desktop-dense",
+      "rule": "Single column on mobile; 8/4 or 12-column grids on large screens. Sticky sidebars for booking summaries on lg+."
+    }
+  ],
+
+  "voiceAndTone": {
+    "style": "Confident operational copy with light satellite/logistics vocabulary",
+    "headlinePattern": "[Product category]. [Three short verbs/phrases separated by periods.]",
+    "headlineExample": "Starlink Hardware Rental. Selected. Scheduled. Shipped.",
+    "bodyStyle": "Short sentences. Practical benefits. Mention rugged cases, prepaid return labels, no activation fees where relevant.",
+    "labelStyle": "Uppercase mono micro-labels above human-readable titles (e.g. '01. ORBITAL HARDWARE & SCHEDULE' above 'Instant Booking Portal')",
+    "microcopy": {
+      "primaryCta": "Open Interactive Booking Portal | Reserve Slots | Submit Starlink Request",
+      "secondaryCta": "Active Feed | Go To Booking Form | Check Availability",
+      "emptyStates": "Direct user to the next action with a black button",
+      "success": "Reference a booking ID in mono font inside a gray receipt card"
+    }
+  },
+
+  "typography": {
+    "fonts": {
+      "display": {
+        "family": "Space Grotesk",
+        "fallback": "sans-serif",
+        "usage": "Page titles, section headings, kit names, calendar month titles",
+        "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap"
+      },
+      "sans": {
+        "family": "Inter",
+        "fallback": "ui-sans-serif, system-ui, sans-serif",
+        "usage": "Body copy, form labels, FAQ answers, button text",
+        "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&display=swap"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "fallback": "ui-monospace, SFMono-Regular, monospace",
+        "usage": "Step labels, prices, booking IDs, dates, status badges, calendar day headers, spec tables",
+        "googleFontsUrl": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+      }
+    },
+    "scale": {
+      "heroTitle": {
+        "mobile": "text-4xl font-extrabold tracking-tight leading-[1.1]",
+        "desktop": "sm:text-6xl sm:leading-[1.05]",
+        "font": "display",
+        "color": "gray-950 with secondary line in gray-500 font-medium"
+      },
+      "sectionTitle": {
+        "size": "text-3xl font-bold tracking-tight",
+        "font": "display",
+        "color": "gray-950"
+      },
+      "cardTitle": {
+        "size": "text-xl font-extrabold",
+        "font": "display",
+        "color": "gray-900"
+      },
+      "subsectionTitle": {
+        "size": "text-lg font-bold",
+        "font": "display",
+        "color": "gray-900"
+      },
+      "body": {
+        "size": "text-sm sm:text-base leading-relaxed",
+        "font": "sans",
+        "color": "gray-600 or gray-500 for secondary"
+      },
+      "bodySmall": {
+        "size": "text-xs leading-relaxed",
+        "font": "sans",
+        "color": "gray-500 or gray-600"
+      },
+      "microLabel": {
+        "size": "text-[9px] to text-[10px] font-bold uppercase tracking-widest",
+        "font": "mono",
+        "color": "gray-400 (neutral) | emerald-600 (step active) | gray-400 on dark badges"
+      },
+      "priceDisplay": {
+        "size": "text-xl to text-2xl font-extrabold",
+        "font": "mono",
+        "color": "gray-900 or black"
+      },
+      "priceHero": {
+        "size": "text-6xl md:text-7xl font-extrabold tracking-tight",
+        "font": "mono or display",
+        "color": "white on dark panels, black on light"
+      }
+    },
+    "rules": [
+      "Use tracking-tight on all display headings",
+      "Use tracking-widest on uppercase mono labels only",
+      "Never use more than three font sizes in one card",
+      "Prices and IDs always in mono",
+      "Selection highlight: text selection uses black background, white text"
+    ]
+  },
+
+  "color": {
+    "philosophy": "Neutral canvas + black actions + semantic color only for status, success, and live indicators",
+    "palette": {
+      "canvas": {
+        "page": "#f9fafb",
+        "description": "App background — slightly warmer than pure gray-50"
+      },
+      "surface": {
+        "primary": "#ffffff",
+        "secondary": "#f9fafb",
+        "muted": "#f3f4f6",
+        "description": "Cards, inputs, inset panels"
+      },
+      "text": {
+        "primary": "#030712",
+        "secondary": "#4b5563",
+        "muted": "#9ca3af",
+        "onDark": "#ffffff",
+        "note": "Tailwind: gray-950, gray-600, gray-500, gray-400"
+      },
+      "brand": {
+        "primary": "#000000",
+        "primaryHover": "#1f2937",
+        "accent": "#2563eb",
+        "accentUsage": "Monthly rate emphasis, optional links — not primary buttons"
+      },
+      "border": {
+        "default": "#e5e7eb",
+        "subtle": "#f3f4f6",
+        "emphasis": "#000000",
+        "note": "Components use border-gray-150/200 — map to gray-200 in Tailwind"
+      },
+      "semantic": {
+        "success": {
+          "text": "#047857",
+          "background": "#ecfdf5",
+          "border": "#d1fae5",
+          "usage": "Confirmed states, live pulse, waived fees, refundable deposit callouts"
+        },
+        "warning": {
+          "text": "#92400e",
+          "background": "#fffbeb",
+          "border": "#fde68a",
+          "usage": "Live price calculation panel, pending booking status"
+        },
+        "error": {
+          "text": "#dc2626",
+          "background": "#fef2f2",
+          "border": "#fecaca",
+          "usage": "Blocked calendar dates, cancel actions, validation"
+        },
+        "info": {
+          "pending": "amber-50/100",
+          "confirmed": "sky-50/100",
+          "dispatched": "blue-50/100",
+          "active": "emerald-50/100",
+          "completed": "gray-100/200"
+        }
+      }
+    },
+    "doNotUse": [
+      "Blue-600 primary buttons (reserved for old marketing design)",
+      "Large gradient heroes",
+      "Colored card backgrounds except semantic panels"
+    ]
+  },
+
+  "spacing": {
+    "baseUnit": "4px (Tailwind default)",
+    "pagePadding": {
+      "mobile": "px-4",
+      "tablet": "sm:px-6",
+      "desktop": "lg:px-8"
+    },
+    "sectionVertical": {
+      "hero": "pt-16 pb-12",
+      "standard": "py-8 to py-16",
+      "compact": "py-6"
+    },
+    "containerMaxWidth": {
+      "narrow": "max-w-4xl",
+      "content": "max-w-5xl",
+      "wide": "max-w-7xl",
+      "usage": {
+        "hero": "max-w-4xl",
+        "faq": "max-w-4xl",
+        "bookingPortal": "max-w-7xl",
+        "footer": "max-w-7xl"
+      }
+    },
+    "grid": {
+      "bookingLayout": "lg:grid-cols-12 — main form lg:col-span-8, sidebar lg:col-span-4",
+      "kitSelection": "grid-cols-1 md:grid-cols-3 gap-3",
+      "formFields": "md:grid-cols-3 or md:grid-cols-4 gap-4",
+      "calendarMonths": "flex-col md:flex-row gap-8"
+    },
+    "cardPadding": {
+      "compact": "p-5",
+      "standard": "p-6 sm:p-8",
+      "large": "p-6 sm:p-10"
+    },
+    "stackGap": {
+      "tight": "space-y-3",
+      "standard": "space-y-4 to space-y-6",
+      "section": "gap-8"
+    }
+  },
+
+  "shapeAndElevation": {
+    "borderRadius": {
+      "buttons": "rounded-xl (12px) — primary shape for all buttons",
+      "cards": "rounded-2xl (16px) — outer containers, calendar wrapper, booking form",
+      "inputs": "rounded-xl",
+      "badges": "rounded-full for pill badges; rounded-lg for small tags",
+      "calendarCells": "rounded-lg",
+      "statusPills": "rounded-xl or rounded-md",
+      "avoid": "rounded-full as default CTA (marketing pattern)"
+    },
+    "shadows": {
+      "card": "shadow-sm — default card elevation",
+      "cardHover": "shadow-md on interactive card hover only",
+      "selectedKit": "ring-1 ring-black + shadow-xs",
+      "buttons": "shadow-sm on primary black buttons",
+      "avoid": "shadow-lg, colored glows, heavy drop shadows"
+    },
+    "borders": {
+      "default": "border border-gray-200",
+      "card": "border border-gray-150 (use gray-200)",
+      "selected": "border-black ring-1 ring-black",
+      "dashedEmpty": "border border-dashed border-gray-200",
+      "dividers": "border-t border-gray-100 inside cards"
+    }
+  },
+
+  "iconography": {
+    "library": "Lucide React (or equivalent stroke icons in PHP/static)",
+    "style": "Outline, 1.5–2px stroke, h-4 w-4 default, h-5 w-5 in headers",
+    "color": "text-gray-400 default; text-black on hover or for emphasis; semantic colors match status",
+    "placement": "Left of input fields (absolute positioned in field), inline with nav links, inside circular or square icon containers",
+    "brandMark": {
+      "description": "Black circle (w-8 h-8) with white diagonal line (rotated 45°) — abstract satellite/dish mark",
+      "wordmark": "STARLINK RENT in Space Grotesk, uppercase, tracking-tighter",
+      "subLabel": "Constellation Schedule Grid in 9px mono gray-400"
+    }
+  },
+
+  "motion": {
+    "philosophy": "Subtle, functional, never decorative",
+    "transitions": "transition on hover/focus; hover:border-black on bordered controls",
+    "microInteractions": {
+      "buttonPress": "active:scale-95",
+      "buttonHover": "hover:bg-gray-800 on black buttons",
+      "fadeIn": "opacity 0→1, translateY 4px→0, 300ms cubic-bezier(0.16, 1, 0.3, 1)",
+      "faqExpand": "max-height transition ~350ms",
+      "livePulse": "animate-pulse on emerald status dots (calendar live indicator)"
+    },
+    "scroll": "scroll-behavior: smooth for in-page anchor navigation"
+  },
+
+  "layout": {
+    "appShell": {
+      "structure": "sticky header + flex-grow main + footer",
+      "headerHeight": "h-16",
+      "headerStyle": "sticky top-0 z-40 border-b border-gray-100 bg-white/90 backdrop-blur-md"
+    },
+    "pageSections": [
+      {
+        "id": "hero-section",
+        "purpose": "Value prop + single primary CTA scroll to booking",
+        "alignment": "center",
+        "maxWidth": "max-w-4xl"
+      },
+      {
+        "id": "booking-portal",
+        "purpose": "Main 8/4 grid: booking form + sticky sidebar",
+        "maxWidth": "max-w-7xl"
+      },
+      {
+        "id": "faq-section",
+        "purpose": "Centered FAQ with filters",
+        "maxWidth": "max-w-4xl",
+        "separator": "border-t border-gray-150 mt-12"
+      }
+    ],
+    "sidebar": {
+      "behavior": "lg:sticky lg:top-24",
+      "contents": ["Info disclosure card", "Active bookings list", "Telemetry/help card"]
+    }
+  },
+
+  "components": {
+    "navbar": {
+      "description": "Sticky top bar with brand, section nav, and action buttons",
+      "anatomy": ["Brand mark + wordmark + mono sub-label", "Desktop nav links with icons", "Secondary bordered button (Active Feed)", "Primary black CTA (Reserve Slots)"],
+      "styles": {
+        "navLink": "text-xs font-semibold uppercase tracking-wider text-gray-500 font-mono hover:text-black",
+        "secondaryButton": "rounded-xl border border-gray-200 bg-white px-4 py-2 text-xs font-bold font-mono hover:border-black",
+        "primaryButton": "rounded-xl bg-black px-4 py-2.5 text-xs font-bold text-white hover:bg-gray-800",
+        "badgeCount": "absolute -top-1.5 -right-1.5 h-5 w-5 rounded-full bg-black text-white text-[10px] ring-2 ring-white"
+      }
+    },
+
+    "heroBadge": {
+      "description": "Black pill announcing live feature status",
+      "styles": "inline-flex bg-black text-white text-[10px] font-bold uppercase tracking-widest px-3.5 py-1.5 rounded-full",
+      "icon": "Small sparkles or pulse icon left of text"
+    },
+
+    "primaryButton": {
+      "description": "Main action — always black, never blue",
+      "default": "rounded-xl bg-black px-8 py-3.5 text-xs font-bold text-white shadow-sm hover:bg-gray-800 active:scale-95",
+      "withIcon": "flex items-center space-x-2, arrow-right icon h-4 w-4",
+      "disabled": "bg-gray-200 text-gray-400 cursor-not-allowed — no hover"
+    },
+
+    "secondaryButton": {
+      "description": "Outlined or ghost actions",
+      "default": "rounded-xl border border-gray-200 bg-white text-gray-700 hover:border-black hover:bg-gray-50",
+      "ghost": "text-gray-500 hover:text-black underline for destructive-secondary (clear dates)"
+    },
+
+    "card": {
+      "description": "Universal content container",
+      "default": "rounded-2xl border border-gray-200 bg-white p-5 shadow-sm",
+      "compact": "rounded-2xl border bg-white p-5 shadow-xs text-xs",
+      "nested": "rounded-xl bg-gray-50 border border-gray-200",
+      "infoSidebar": "rounded-2xl border border-gray-200 bg-white p-5 shadow-xs text-xs space-y-3.5"
+    },
+
+    "stepLabel": {
+      "description": "Numbered section prefix above form steps",
+      "pattern": "01. ORBITAL HARDWARE & SCHEDULE",
+      "styles": "font-mono text-[10px] font-bold uppercase tracking-widest text-emerald-600 (step 1) or text-gray-400",
+      "followedBy": "font-display text-xl font-extrabold title + text-xs gray-500 description"
+    },
+
+    "kitSelectorCard": {
+      "description": "Selectable hardware tier in 3-column grid",
+      "states": {
+        "default": "rounded-xl border border-gray-200 bg-white p-4 hover:border-gray-400",
+        "selected": "border-black bg-gray-50/50 shadow-xs ring-1 ring-black"
+      },
+      "anatomy": ["Optional corner badge (black pill, 8px uppercase mono)", "Kit name (display xs bold)", "Tagline (10px gray, 2-line clamp)", "Footer row: weekly price mono bold + deposit mono muted"],
+      "badge": "absolute top-2.5 right-2.5 bg-black text-white text-[8px] font-bold uppercase px-1.5 py-0.5 rounded"
+    },
+
+    "interactiveCalendar": {
+      "description": "Dual-month date range picker with availability states",
+      "wrapper": "rounded-2xl border bg-white p-5 sm:p-6 shadow-sm",
+      "header": {
+        "title": "font-display text-sm font-bold with emerald-500 pulsing dot",
+        "navButtons": "p-1.5 rounded-lg border border-gray-200 hover:border-black"
+      },
+      "legend": "font-mono text-[11px] flex wrap gap-4 justify-center — available (white box), selected (black box), blocked (red-50 strikethrough)",
+      "dayCell": {
+        "available": "aspect-square rounded-lg bg-white border border-gray-100 hover:bg-gray-50 text-gray-800",
+        "blocked": "bg-red-50 text-red-300 line-through cursor-not-allowed border-red-100/50 + red dot indicator",
+        "rangeMiddle": "bg-gray-100 border-y border-gray-200",
+        "rangeStartEnd": "bg-black text-white ring-1 ring-black font-black + IN/OUT mono micro labels"
+      },
+      "selectionSummary": "bg-gray-50 border rounded-xl px-3 py-2 with CheckCircle emerald icon + mono date chips"
+    },
+
+    "formField": {
+      "description": "Text inputs with left icon",
+      "label": "text-[10px] font-semibold text-gray-600 mb-1",
+      "input": "w-full rounded-xl border border-gray-200 bg-gray-50 py-2.5 pl-10 pr-4 text-xs text-gray-950 outline-none focus:border-black",
+      "textarea": "same as input, min-h-[60px], pl-10",
+      "icon": "absolute left-3.5 h-4 w-4 text-gray-400",
+      "monoFields": "state/zip: text-center uppercase font-mono"
+    },
+
+    "priceQuotePanel": {
+      "description": "Amber-tinted live calculation block when dates selected",
+      "wrapper": "rounded-xl border border-amber-100 bg-amber-50/55 p-5 shadow-sm",
+      "header": "Flame icon + 'Real-time Rate Calculation' + black pill showing week/day count",
+      "lineItems": "grid text-xs font-mono — label gray-400, value black bold",
+      "total": "border-t border-amber-200 flex justify-between text-xl font-extrabold mono black",
+      "emptyState": "dashed border gray-200 bg-gray-50/50 centered text-xs gray-400 with Layers icon"
+    },
+
+    "bookingListItem": {
+      "description": "Sidebar booking card in active feed",
+      "wrapper": "rounded-xl border border-gray-200 bg-gray-50 p-4 hover:border-gray-300",
+      "header": "mono booking ID + created date + status badge",
+      "statusBadges": {
+        "pending": "amber-50/amber text uppercase 9px mono",
+        "confirmed": "sky-50",
+        "dispatched": "blue-50",
+        "active": "emerald-50",
+        "completed": "gray-100"
+      },
+      "footer": "white inset bar with estimated bill mono + cancel link (red on hover)"
+    },
+
+    "successState": {
+      "description": "Post-submit confirmation inside form card",
+      "icon": "h-14 w-14 rounded-full bg-emerald-50 border-emerald-100 CheckCircle animate-bounce",
+      "title": "font-display text-2xl font-bold",
+      "receipt": "rounded-xl bg-gray-50 p-5 max-w-sm mono text-xs key-value rows + border-t total"
+    },
+
+    "faqAccordion": {
+      "description": "Expandable Q&A with category filter tabs",
+      "sectionHeader": "centered mono micro-label + display h2 + xs gray subtitle",
+      "categoryTabs": "flex gap-1 p-1 bg-gray-100 rounded-xl font-mono text-[10px] uppercase — active tab: bg-white shadow-xs text-black",
+      "searchInput": "rounded-xl border py-2 pl-3.5 text-xs focus:border-black",
+      "item": "rounded-xl border bg-white overflow-hidden",
+      "trigger": "flex justify-between p-4 sm:p-5 hover:bg-gray-50/40 font-semibold text-sm",
+      "toggle": "w-5 h-5 rounded-full bg-gray-50 border flex items-center justify-center mono +/—",
+      "answer": "px-4 pb-5 pt-1 text-xs text-gray-500 border-t border-gray-50"
+    },
+
+    "pricingTierCard": {
+      "description": "Standalone pricing grid (optional section — used in PricingTiers component)",
+      "wrapper": "rounded-2xl border bg-white — selected: border-black ring-1 ring-black shadow-lg",
+      "badge": "absolute -top-3 right-5 rounded-full bg-black text-white px-2.5 py-0.5 text-[10px] uppercase",
+      "priceBlock": "rounded-xl bg-gray-50 p-4 border — weekly black mono + monthly blue-600 mono",
+      "specsRow": "font-mono text-[11px] border-y py-3.5 flex justify-between",
+      "features": "Check icon black + xs gray text list"
+    },
+
+    "availabilityChecker": {
+      "description": "ZIP/city coverage lookup widget (optional)",
+      "inputRow": "rounded-xl bg-gray-50 border pl-10 pr-24 — inline black Check button absolute right",
+      "reportBanner": "rounded-xl border p-4 — color by status (emerald/blue/amber/rose)",
+      "metrics": "2-col grid rounded-xl bg-gray-50/50 p-3.5 with progress bar (black fill)"
+    },
+
+    "footer": {
+      "description": "Minimal white bar",
+      "styles": "bg-white border-t border-gray-100 py-12 text-xs text-gray-400",
+      "layout": "flex col sm:row justify-between items-center max-w-7xl",
+      "brand": "Same circle mark + STARLINK RENT display uppercase"
+    },
+
+    "emptyState": {
+      "description": "No bookings / no FAQ results",
+      "pattern": "Centered icon in gray circle + semibold title + xs muted description + black CTA button",
+      "dashedVariant": "border-dashed rounded-xl py-6 font-mono text-xs text-gray-400"
+    },
+
+    "codeInline": {
+      "description": "Technical terms in prose",
+      "styles": "bg-gray-100 px-1 py-0.5 rounded font-mono text-[10px] text-black"
+    }
+  },
+
+  "contentOutline": {
+    "product": "Starlink Mini / Standard / Flat High Performance / Enterprise hardware rental",
+    "primaryFlow": [
+      "Land on hero → scroll to booking portal",
+      "Select kit tier (3 options)",
+      "Pick date range on calendar",
+      "Enter shipping/contact details",
+      "Review amber price quote → submit",
+      "See success receipt + booking appears in sidebar feed"
+    ],
+    "rentalPlans": {
+      "count": 3,
+      "fields": ["name", "badge", "tagline", "weeklyRate", "monthlyRate", "deposit", "features", "equipmentIncluded", "techSpec"],
+      "note": "See design/src/data/rentalData.ts for canonical copy"
+    },
+    "faqCategories": ["all", "rental", "setup", "billing", "coverage"]
+  },
+
+  "implementation": {
+    "stack": {
+      "prototype": "React 19 + Vite + Tailwind CSS v4",
+      "productionTarget": "PHP 8.4 server-rendered templates + minimal JS",
+      "icons": "Lucide (React) or inline SVG equivalents"
+    },
+    "tailwind": {
+      "cdnNote": "For static HTML prototypes use Tailwind CDN with extended fontFamily in config",
+      "customTheme": {
+        "fontFamily": {
+          "sans": ["Inter", "system-ui", "sans-serif"],
+          "display": ["Space Grotesk", "sans-serif"],
+          "mono": ["JetBrains Mono", "monospace"]
+        },
+        "colors": {
+          "brand-primary": "#000000",
+          "brand-accent": "#2563eb"
+        }
+      },
+      "utilityPatterns": [
+        "font-display for headlines",
+        "font-mono for metadata",
+        "selection:bg-black selection:text-white on app root",
+        "shadow-xs for subtle cards",
+        "border-gray-200 as default card border"
+      ]
+    },
+    "phpTemplates": {
+      "suggestedPath": "website/templates/customer/",
+      "approach": "Mirror design/ component structure as PHP partials; reuse same class strings; extract shared tokens to a CSS variables file later if needed"
+    },
+    "accessibility": {
+      "contrast": "Black on white for primary text; gray-500 minimum for secondary body",
+      "focus": "focus:border-black on inputs (visible focus ring via border change)",
+      "buttons": "aria-expanded on FAQ triggers; disabled state on submit until dates selected",
+      "motion": "Respect prefers-reduced-motion for pulse/bounce animations"
+    }
+  },
+
+  "aiReplicationChecklist": [
+    "Load all three Google Fonts before rendering",
+    "Set page background to #f9fafb, not white",
+    "Use black rounded-xl buttons — never blue primary CTAs",
+    "Add uppercase mono micro-labels above every major section",
+    "Wrap content in white rounded-2xl bordered cards",
+    "Booking page uses 8/4 column split on large screens with sticky sidebar",
+    "Calendar shows red blocked dates, black selected range, emerald live dot",
+    "Price quotes use amber panel, not blue or green",
+    "Status badges use soft semantic pastels with mono uppercase text",
+    "Copy tone: operational/satellite logistics, not casual camping marketing",
+    "Reference design/src/ for component behavior and design/src/data/rentalData.ts for content"
+  ]
+}

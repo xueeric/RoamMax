@@ -1,0 +1,6 @@
+{
+  "name": "RoamMax Rental Portal",
+  "description": "A minimalist, high-performance Starlink equipment rental website. Easily check regional satellite coverage/availability, review flexible pricing tiers, explore setup FAQs, and submit instant booking requests.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

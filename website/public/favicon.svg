@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="RoamMax">
+  <circle cx="32" cy="32" r="32" fill="#000"/>
+  <rect x="14.72" y="29.79" width="34.56" height="4.42" rx="2" fill="#fff" transform="rotate(25 32 32)"/>
+  <rect x="30.2" y="40.32" width="2.94" height="8.83" rx="1.47" fill="#fff" transform="rotate(53 31.68 40.32)"/>
+</svg>

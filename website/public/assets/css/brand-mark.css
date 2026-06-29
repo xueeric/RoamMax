@@ -1,0 +1,50 @@
+/*
+ * RoamMax brand mark — Starlink Mini silhouette (final).
+ */
+.brand-mark {
+    --brand-mark-size: 3rem;
+    --brand-mark-dish-angle: 25deg;
+    --brand-mark-dish-lift: 0;
+    --brand-mark-dish-width: 0.54;
+    --brand-mark-dish-thickness: 0.069;
+    --brand-mark-stand-x: -0.005;
+    --brand-mark-stand-y: 0.13;
+    --brand-mark-stand-angle: 53deg;
+    --brand-mark-stand-width: 0.046;
+    --brand-mark-stand-height: 0.138;
+
+    position: relative;
+    width: var(--brand-mark-size);
+    height: var(--brand-mark-size);
+    border-radius: 9999px;
+    background: #000;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+}
+
+.brand-mark::before {
+    content: '';
+    position: absolute;
+    width: calc(var(--brand-mark-size) * var(--brand-mark-dish-width));
+    height: calc(var(--brand-mark-size) * var(--brand-mark-dish-thickness));
+    background: #fff;
+    border-radius: 2px;
+    transform: rotate(var(--brand-mark-dish-angle)) translateY(calc(var(--brand-mark-size) * var(--brand-mark-dish-lift)));
+    z-index: 2;
+}
+
+.brand-mark::after {
+    content: '';
+    position: absolute;
+    width: calc(var(--brand-mark-size) * var(--brand-mark-stand-width));
+    height: calc(var(--brand-mark-size) * var(--brand-mark-stand-height));
+    background: #fff;
+    border-radius: 2px;
+    transform-origin: top center;
+    transform: translate(
+            calc(var(--brand-mark-size) * var(--brand-mark-stand-x)),
+            calc(var(--brand-mark-size) * var(--brand-mark-stand-y))
+        )
+        rotate(var(--brand-mark-stand-angle));
+}

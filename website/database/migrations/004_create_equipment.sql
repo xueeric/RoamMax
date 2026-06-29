@@ -1,0 +1,20 @@
+CREATE TABLE equipment (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nickname TEXT NOT NULL,
+    serial_number TEXT,
+    owner_type TEXT NOT NULL CHECK (owner_type IN ('admin', 'partner')),
+    partner_id INTEGER,
+    purchase_date TEXT,
+    purchase_cost_cents INTEGER NOT NULL DEFAULT 0,
+    starlink_account_email TEXT,
+    data_plan TEXT,
+    billing_cycle_start_day INTEGER,
+    current_storage_location_id INTEGER NOT NULL,
+    at_pickup_site INTEGER NOT NULL DEFAULT 0,
+    rental_priority INTEGER NOT NULL DEFAULT 0,
+    status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'maintenance', 'retired', 'with_customer')),
+    notes TEXT,
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (partner_id) REFERENCES partners(id) ON DELETE SET NULL,
+    FOREIGN KEY (current_storage_location_id) REFERENCES locations(id)
+);
