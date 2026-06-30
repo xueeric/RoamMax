@@ -1533,7 +1533,8 @@ final class BookingService
             'SELECT b.*, l.name AS location_name, l.address AS location_address, l.city AS location_city,
                     l.province AS location_province, l.latitude AS location_latitude,
                     l.longitude AS location_longitude, l.pickup_instructions,
-                    e.nickname AS equipment_name, u.name AS customer_name, u.email AS customer_email
+                    e.nickname AS equipment_name, e.wifi_ssid, e.wifi_password_enc,
+                    u.name AS customer_name, u.email AS customer_email
              FROM bookings b
              INNER JOIN locations l ON l.id = b.location_id
              LEFT JOIN equipment e ON e.id = b.equipment_id

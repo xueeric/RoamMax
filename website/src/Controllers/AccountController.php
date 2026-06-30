@@ -118,6 +118,7 @@ final class AccountController
             'user' => $user,
             'booking' => $booking,
             'pickup' => $presenter->pickupSection($booking),
+            'wifi' => $presenter->wifiSection($booking),
             'paymentTimeline' => $presenter->paymentTimeline($booking, $paymentRows),
             'cancelPreview' => $presenter->cancelPreview($booking),
             'canCancel' => (new \Starlink\Services\BookingStateService())->canCustomerCancel($booking),

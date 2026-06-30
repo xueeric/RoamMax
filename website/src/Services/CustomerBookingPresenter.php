@@ -54,6 +54,30 @@ final class CustomerBookingPresenter
 
     /**
      * @param array<string, mixed> $booking
+     * @return array{headline: string, lines: list<string>}|null
+     */
+    public function wifiSection(array $booking): ?array
+    {
+        if (!booking_should_show_wifi($booking)) {
+            return null;
+        }
+
+        $wifi = booking_wifi_credentials($booking);
+        if ($wifi === null) {
+            return null;
+        }
+
+        return [
+            'headline' => 'WiFi access',
+            'lines' => [
+                'Network: ' . $wifi['ssid'],
+                'Password: ' . $wifi['password'],
+            ],
+        ];
+    }
+
+    /**
+     * @param array<string, mixed> $booking
      * @param list<array<string, mixed>> $paymentRows
      * @return list<array{label: string, amount_cents: int, status: string, detail: string, date_label: ?string}>
      */

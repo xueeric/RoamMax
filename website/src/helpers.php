@@ -251,6 +251,37 @@ function booking_fulfillment_status(array $booking): string
     return (new \Starlink\Services\BookingStateService())->mapLegacyRow($booking)['fulfillment_status'];
 }
 
+/**
+ * @param array<string, mixed> $booking
+ * @return array{ssid: string, password: string}|null
+ */
+function booking_wifi_credentials(array $booking): ?array
+{
+    $password = \Starlink\Services\CredentialCipher::decrypt($booking['wifi_password_enc'] ?? null);
+    if ($password === '') {
+        return null;
+    }
+
+    $ssid = trim((string) ($booking['wifi_ssid'] ?? ''));
+
+    return [
+        'ssid' => $ssid !== '' ? $ssid : 'WiFi network',
+        'password' => $password,
+    ];
+}
+
+/** @param array<string, mixed> $booking */
+function booking_should_show_wifi(array $booking): bool
+{
+    if (booking_wifi_credentials($booking) === null) {
+        return false;
+    }
+
+    $lifecycle = booking_lifecycle_status($booking);
+
+    return !in_array($lifecycle, ['booking_pending_payment', 'booking_cancelled'], true);
+}
+
 /** @param array<string, mixed> $booking */
 function booking_is_owner_block(array $booking): bool
 {

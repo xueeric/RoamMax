@@ -6,6 +6,7 @@ use Starlink\Services\PricingService;
 
 /** @var array<string, mixed> $booking */
 /** @var array<string, mixed> $pickup */
+/** @var ?array{headline: string, lines: list<string>} $wifi */
 /** @var list<array<string, mixed>> $paymentTimeline */
 /** @var array<string, mixed> $cancelPreview */
 
@@ -66,6 +67,16 @@ $timelineStatusClass = static fn (string $status): string => match ($status) {
         <?php endif; ?>
         <p class="booking-detail-meta">Fulfillment: <?= escape(str_replace('_', ' ', $fulfillment)) ?></p>
     </div>
+
+    <?php if ($wifi !== null): ?>
+    <div class="card booking-detail-panel">
+        <div class="micro-label">Connectivity</div>
+        <h2 class="booking-detail-heading"><?= escape($wifi['headline']) ?></h2>
+        <?php foreach ($wifi['lines'] as $line): ?>
+            <p class="booking-detail-line mono"><?= escape($line) ?></p>
+        <?php endforeach; ?>
+    </div>
+    <?php endif; ?>
 
     <div class="card booking-detail-panel">
         <div class="micro-label">Payment progress</div>
