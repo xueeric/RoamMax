@@ -234,14 +234,14 @@
             pickupInfo.appendChild(block);
         };
 
-        const areaLabel = location.city || location.public_label || location.name || 'Your area';
-        const preCheckoutNote = 'Exact pickup address and instructions are shared after you complete your booking.';
+        const locationName = location.name || location.city || 'Your area';
+        const preCheckoutNote = 'The exact address and pickup instructions are shared after you complete your booking.';
 
         if (isPickup()) {
             const isHome = location.location_type === 'home';
             if (config.hideLocationDetails) {
                 appendBlock('location-pickup-info-label', isHome ? 'Pickup (appointment)' : 'Pickup location');
-                appendBlock('location-pickup-info-name', areaLabel);
+                appendBlock('location-pickup-info-name', locationName);
                 appendBlock(
                     'location-pickup-info-instructions',
                     isHome
@@ -259,14 +259,14 @@
             }
         } else if (isCityDelivery()) {
             appendBlock('location-pickup-info-label', 'Local delivery area');
-            appendBlock('location-pickup-info-name', `${areaLabel} · within ${cityDeliveryRadiusKm} km`);
+            appendBlock('location-pickup-info-name', `${locationName} · within ${cityDeliveryRadiusKm} km`);
             if (!config.hideLocationDetails) {
                 appendBlock('location-pickup-info-address', location.address || '');
             }
             appendBlock(
                 'location-pickup-info-instructions',
                 config.hideLocationDetails
-                    ? `Delivery fee ${formatMoney(cityDeliveryFeeCents)}. We deliver from units staged in ${areaLabel}.`
+                    ? `Delivery fee ${formatMoney(cityDeliveryFeeCents)}. We deliver from units staged in ${location.city || locationName}.`
                     : `Delivery fee ${formatMoney(cityDeliveryFeeCents)}. We deliver from units staged in ${location.city || 'this city'}.`,
             );
         } else if (isMailShipping()) {
@@ -278,7 +278,7 @@
             appendBlock(
                 'location-pickup-info-instructions',
                 config.hideLocationDetails
-                    ? `Availability is checked across all hubs. ${preCheckoutNote}`
+                    ? `Your selected area (${locationName}) is for reference only. Availability is checked across all hubs.`
                     : `Your selected location (${location.name}) is for reference only. Availability is checked across all hubs.`,
             );
         } else {

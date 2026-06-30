@@ -18,7 +18,6 @@ if (!isset($calendarLocations)) {
         ? location_display()->calendarLocations($locations ?? [])
         : location_display()->internalCalendarLocations($locations ?? []);
 }
-$calendarLocationLabelKey = $hideLocationDetails ? 'public_label' : 'name';
 ?>
 <section class="home-section">
     <div class="section-heading" id="book">
@@ -42,7 +41,7 @@ $calendarLocationLabelKey = $hideLocationDetails ? 'public_label' : 'name';
                                 value="<?= (int) $location['id'] ?>"
                                 <?= (int) $location['id'] === $defaultLocationId ? 'selected' : '' ?>
                             >
-                                <?= escape($location[$calendarLocationLabelKey] ?? '') ?>
+                                <?= escape($location['name'] ?? '') ?>
                             </option>
                         <?php endforeach; ?>
                     </select>

@@ -6,31 +6,16 @@ namespace Starlink\Services;
 
 /**
  * Public-facing location labels before checkout.
- * Store names and street addresses are revealed only after booking is confirmed.
+ * Location names are shown so customers can choose an area; street addresses
+ * and detailed pickup instructions are revealed only after booking is confirmed.
  */
 final class LocationDisplayService
 {
-    private const PRE_CHECKOUT_PICKUP_NOTE = 'Exact pickup address and instructions are shared after you complete your booking.';
-
-    /**
-     * @param list<array<string, mixed>> $locations
-     */
-    public function publicLabel(array $location, array $locations): string
-    {
-        $city = $this->cityLabel($location);
-        if (!$this->hasMultipleLocationsInCity($location, $locations)) {
-            return $city;
-        }
-
-        return match ((string) ($location['location_type'] ?? 'store')) {
-            'home' => $city . ' · Appointment pickup',
-            default => $city . ' · Store pickup',
-        };
-    }
+    private const PRE_CHECKOUT_ADDRESS_NOTE = 'The exact address and pickup instructions are shared after you complete your booking.';
 
     public function areaLabel(array $location): string
     {
-        return $this->cityLabel($location);
+        return $this->locationName($location);
     }
 
     /**
@@ -68,6 +53,8 @@ final class LocationDisplayService
     }
 
     /**
+     * Customer calendar data: names visible, street addresses omitted.
+     *
      * @param list<array<string, mixed>> $locations
      * @return array<int, array<string, mixed>>
      */
@@ -83,7 +70,7 @@ final class LocationDisplayService
 
             $mapped[$id] = [
                 'id' => $id,
-                'public_label' => $this->publicLabel($location, $locations),
+                'name' => $this->locationName($location),
                 'city' => trim((string) ($location['city'] ?? '')),
                 'province' => trim((string) ($location['province'] ?? '')),
                 'location_type' => (string) ($location['location_type'] ?? 'store'),
@@ -109,21 +96,21 @@ final class LocationDisplayService
      */
     public function preCheckoutPickupInfo(array $location, string $fulfillmentType): ?array
     {
-        $city = $this->cityLabel($location);
+        $name = $this->locationName($location);
         $isHome = (string) ($location['location_type'] ?? 'store') === 'home';
 
         return match ($fulfillmentType) {
             'pickup', 'pickup_appointment', 'store_pickup', 'home_appointment' => [
                 'label' => $isHome ? 'Pickup (appointment)' : 'Pickup location',
-                'name' => $city,
+                'name' => $name,
                 'address' => null,
                 'instructions' => $isHome
-                    ? 'Choose your preferred pickup time at checkout. ' . self::PRE_CHECKOUT_PICKUP_NOTE
-                    : self::PRE_CHECKOUT_PICKUP_NOTE,
+                    ? 'Choose your preferred pickup time at checkout. ' . self::PRE_CHECKOUT_ADDRESS_NOTE
+                    : self::PRE_CHECKOUT_ADDRESS_NOTE,
             ],
             'city_delivery' => [
                 'label' => 'Local delivery area',
-                'name' => $city . ' · within ' . (int) pricing_config('city_delivery_radius_km', 50) . ' km',
+                'name' => $name . ' · within ' . (int) pricing_config('city_delivery_radius_km', 50) . ' km',
                 'address' => null,
                 'instructions' => 'Delivery fee based on your selected dates. Tax uses your delivery province.',
             ],
@@ -131,30 +118,20 @@ final class LocationDisplayService
                 'label' => 'Mail shipping',
                 'name' => 'Ships from the first available unit in our fleet',
                 'address' => null,
-                'instructions' => 'Availability is checked across all hubs. ' . self::PRE_CHECKOUT_PICKUP_NOTE,
+                'instructions' => 'Your selected area (' . $name . ') is for reference only. Availability is checked across all hubs.',
             ],
             default => null,
         };
     }
 
-    /**
-     * @param list<array<string, mixed>> $locations
-     */
-    private function hasMultipleLocationsInCity(array $location, array $locations): bool
+    private function locationName(array $location): string
     {
-        $city = trim((string) ($location['city'] ?? ''));
-        if ($city === '') {
-            return count($locations) > 1;
+        $name = trim((string) ($location['name'] ?? ''));
+        if ($name !== '') {
+            return $name;
         }
 
-        $matches = 0;
-        foreach ($locations as $candidate) {
-            if (trim((string) ($candidate['city'] ?? '')) === $city) {
-                $matches++;
-            }
-        }
-
-        return $matches > 1;
+        return $this->cityLabel($location);
     }
 
     private function cityLabel(array $location): string
