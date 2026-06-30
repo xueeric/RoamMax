@@ -8,6 +8,7 @@ use PDO;
 use Starlink\Auth\AuthService;
 use Starlink\Database\Connection;
 use Starlink\Services\CustomerProfileService;
+use Starlink\Services\LocationDisplayService;
 use Starlink\Services\LocationSelectionService;
 use Starlink\Services\PricingConfigService;
 use Starlink\Services\PricingService;
@@ -23,6 +24,7 @@ final class HomeController
         private readonly PricingConfigService $pricingConfig = new PricingConfigService(),
         private readonly CustomerProfileService $profiles = new CustomerProfileService(),
         private readonly LocationSelectionService $locationSelection = new LocationSelectionService(),
+        private readonly LocationDisplayService $locationDisplay = new LocationDisplayService(),
     ) {
         $this->db = $db ?? Connection::get();
     }
@@ -58,6 +60,7 @@ final class HomeController
             'customerShippingProvince' => $customerShippingProvince,
             'defaultLocationId' => $defaultLocationId,
             'locations' => $locations,
+            'calendarLocations' => $this->locationDisplay->calendarLocations($locations),
             'pricingTiers' => $this->pricing->publicTiers(),
             'pricingRules' => $rules,
             'depositCents' => (int) pricing_config('deposit_cents', 35000),

@@ -24,6 +24,7 @@ $fulfillmentLabel = match ($fulfillmentType) {
     default => str_replace('_', ' ', $fulfillmentType),
 };
 $cityDeliveryRadiusKm = (int) pricing_config('city_delivery_radius_km', 50);
+$pickupInfo = location_display()->preCheckoutPickupInfo($location, $fulfillmentType);
 ?>
 <div class="micro-label">03. Checkout & Agreement</div>
 <h1 class="page-title">Complete your booking</h1>
@@ -31,7 +32,7 @@ $cityDeliveryRadiusKm = (int) pricing_config('city_delivery_radius_km', 50);
     <?php if ($fulfillmentType === 'mail_ship'): ?>
         Mail shipping · <span class="mono"><?= escape($startDate) ?> → <?= escape($endDate) ?></span>
     <?php else: ?>
-        <?= escape($location['name'] ?? '') ?> · <?= escape($fulfillmentLabel) ?> ·
+        <?= escape(location_display()->areaLabel($location)) ?> · <?= escape($fulfillmentLabel) ?> ·
         <span class="mono"><?= escape($startDate) ?> → <?= escape($endDate) ?></span>
     <?php endif; ?>
 </p>
@@ -40,21 +41,12 @@ $cityDeliveryRadiusKm = (int) pricing_config('city_delivery_radius_km', 50);
     <div class="alert alert-error"><?= escape($message) ?></div>
 <?php endif; ?>
 
-<?php if ($fulfillmentType === 'city_delivery' && !empty($location['city'])): ?>
+<?php if ($pickupInfo !== null): ?>
     <div class="location-pickup-info location-pickup-info-static">
-        <div class="location-pickup-info-label">Local delivery area</div>
-        <div class="location-pickup-info-name"><?= escape($location['city']) ?> · within <?= $cityDeliveryRadiusKm ?> km</div>
-        <div class="location-pickup-info-instructions">Delivery fee based on your selected dates. Tax uses your delivery province.</div>
-    </div>
-<?php endif; ?>
-
-<?php if (in_array($fulfillmentType, ['pickup', 'pickup_appointment', 'store_pickup', 'home_appointment'], true) && !empty($location['address'])): ?>
-    <div class="location-pickup-info location-pickup-info-static">
-        <div class="location-pickup-info-label"><?= in_array($fulfillmentType, ['pickup_appointment', 'home_appointment'], true) ? 'Pickup (appointment)' : 'Pickup location' ?></div>
-        <div class="location-pickup-info-name"><?= escape($location['name'] ?? '') ?></div>
-        <div class="location-pickup-info-address"><?= escape($location['address']) ?></div>
-        <?php if (!empty($location['pickup_instructions'])): ?>
-            <div class="location-pickup-info-instructions"><?= escape($location['pickup_instructions']) ?></div>
+        <div class="location-pickup-info-label"><?= escape($pickupInfo['label']) ?></div>
+        <div class="location-pickup-info-name"><?= escape($pickupInfo['name']) ?></div>
+        <?php if (!empty($pickupInfo['instructions'])): ?>
+            <div class="location-pickup-info-instructions"><?= escape($pickupInfo['instructions']) ?></div>
         <?php endif; ?>
     </div>
 <?php endif; ?>
