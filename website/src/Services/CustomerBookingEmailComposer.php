@@ -64,6 +64,7 @@ final class CustomerBookingEmailComposer
         $sectionsHtml = $this->reservationSection($booking)
             . $this->priceSection($booking)
             . $this->paymentSection($booking, $eventKey, $context)
+            . $this->wifiSection($booking, $eventKey)
             . $this->footerSection();
 
         $inner = <<<HTML
@@ -76,6 +77,7 @@ HTML;
             . $this->reservationSectionPlain($booking)
             . $this->priceSectionPlain($booking)
             . $this->paymentSectionPlain($booking, $eventKey)
+            . $this->wifiSectionPlain($booking, $eventKey)
             . $this->footerSectionPlain();
 
         return [
@@ -192,11 +194,13 @@ HTML;
         $inner = <<<HTML
 <p style="margin:0;font-size:17px;font-weight:600;color:#111827;line-height:1.4;">{$this->e($headline)}</p>
 {$messageHtml}
+{$this->wifiSection($booking, $eventKey)}
 {$this->footerSection()}
 HTML;
 
         $plain = $headline
             . ($message !== '' ? "\n\n" . $message : '')
+            . $this->wifiSectionPlain($booking, $eventKey)
             . $this->footerSectionPlain();
 
         return [
@@ -392,6 +396,55 @@ HTML;
     private function paymentSectionPlain(array $booking, string $eventKey): string
     {
         return $this->sectionPlain('Payment info', $this->paymentRows($booking, $eventKey, []));
+    }
+
+    /** @param array<string, mixed> $booking */
+    private function wifiSection(array $booking, string $eventKey): string
+    {
+        if (!$this->shouldIncludeWifi($eventKey)) {
+            return '';
+        }
+
+        $wifi = booking_wifi_credentials($booking);
+        if ($wifi === null) {
+            return '';
+        }
+
+        return $this->sectionHtml('WiFi access', [
+            ['Network', $wifi['ssid']],
+            ['Password', $wifi['password']],
+        ]);
+    }
+
+    /** @param array<string, mixed> $booking */
+    private function wifiSectionPlain(array $booking, string $eventKey): string
+    {
+        if (!$this->shouldIncludeWifi($eventKey)) {
+            return '';
+        }
+
+        $wifi = booking_wifi_credentials($booking);
+        if ($wifi === null) {
+            return '';
+        }
+
+        return $this->sectionPlain('WiFi access', [
+            ['Network', $wifi['ssid']],
+            ['Password', $wifi['password']],
+        ]);
+    }
+
+    private function shouldIncludeWifi(string $eventKey): bool
+    {
+        return in_array($eventKey, [
+            'payment_etransfer_confirmed',
+            'payment_square_rental_captured',
+            'payment_square_full_captured',
+            'payment_deposit_scheduled_processed',
+            'fulfillment_shipped',
+            'fulfillment_with_customer',
+            'appointment_confirmed',
+        ], true);
     }
 
     /**

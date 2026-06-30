@@ -59,6 +59,12 @@ require WEBSITE_ROOT . '/templates/admin/_page-header.php';
 <label><span>Starlink portal password</span><input type="password" name="starlink_account_password" value="" placeholder="<?= !empty($starlinkPassword) ? 'Saved — enter new password to replace' : 'Store portal password' ?>" autocomplete="new-password"></label>
 <label style="align-self:end;"><span><input type="checkbox" name="clear_starlink_password" value="1"> Clear saved password</span></label>
 </div>
+<div class="micro-label" style="margin-top:0.5rem;">Customer WiFi (sent in booking emails)</div>
+<div class="form-row">
+<label><span>WiFi network name (SSID)</span><input type="text" name="wifi_ssid" value="<?= escape($eq['wifi_ssid'] ?? '') ?>" placeholder="e.g. STARLINK-XXXX"></label>
+<label><span>WiFi password</span><input type="password" name="wifi_password" value="" placeholder="<?= !empty($wifiPassword) ? 'Saved — enter new password to replace' : 'Network password' ?>" autocomplete="new-password"></label>
+<label style="align-self:end;"><span><input type="checkbox" name="clear_wifi_password" value="1"> Clear saved password</span></label>
+</div>
 <div class="form-row">
 <label><span>Data plan</span>
 <select name="plan_slug">

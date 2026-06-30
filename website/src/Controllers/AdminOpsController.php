@@ -251,6 +251,9 @@ final class AdminOpsController
             'starlinkPassword' => $equipment !== null
                 ? \Starlink\Services\CredentialCipher::decrypt($equipment['starlink_account_password_enc'] ?? null)
                 : null,
+            'wifiPassword' => $equipment !== null
+                ? \Starlink\Services\CredentialCipher::decrypt($equipment['wifi_password_enc'] ?? null)
+                : null,
         ]);
     }
 

@@ -61,16 +61,24 @@ final class EquipmentService
             if ($isStarlink && trim((string) ($data['starlink_account_password'] ?? '')) !== '') {
                 $fields['starlink_account_password_enc'] = CredentialCipher::encrypt(trim((string) $data['starlink_account_password']));
             }
+            if ($isStarlink) {
+                $wifiPasswordEnc = $this->resolveWifiPasswordEnc($data, null);
+                if ($wifiPasswordEnc !== null) {
+                    $fields['wifi_password_enc'] = $wifiPasswordEnc;
+                }
+            }
             $stmt = $this->db->prepare(
                 'INSERT INTO equipment (
                     equipment_type, nickname, serial_number, sku, owner_type, partner_id, purchase_date, purchase_cost_cents,
-                    starlink_account_email, starlink_account_password_enc, data_plan, billing_cycle_start_day,
+                    starlink_account_email, starlink_account_password_enc, wifi_ssid, wifi_password_enc,
+                    data_plan, billing_cycle_start_day,
                     subscription_payer, current_storage_location_id,
                     at_pickup_site, rental_priority, rental_price_cents_per_day, rental_price_cents_flat,
                     status, notes, created_at
                  ) VALUES (
                     :equipment_type, :nickname, :serial_number, :sku, :owner_type, :partner_id, :purchase_date, :purchase_cost_cents,
-                    :starlink_account_email, :starlink_account_password_enc, :data_plan, :billing_cycle_start_day,
+                    :starlink_account_email, :starlink_account_password_enc, :wifi_ssid, :wifi_password_enc,
+                    :data_plan, :billing_cycle_start_day,
                     :subscription_payer, :current_storage_location_id,
                     :at_pickup_site, :rental_priority, :rental_price_cents_per_day, :rental_price_cents_flat,
                     :status, :notes, :created_at
@@ -92,6 +100,7 @@ final class EquipmentService
 
         $passwordEnc = $this->resolvePasswordEnc($data, $existing);
         $fields['starlink_account_password_enc'] = $passwordEnc;
+        $fields['wifi_password_enc'] = $this->resolveWifiPasswordEnc($data, $existing);
 
         $stmt = $this->db->prepare(
             'UPDATE equipment SET
@@ -99,6 +108,7 @@ final class EquipmentService
                 owner_type = :owner_type, partner_id = :partner_id, purchase_date = :purchase_date,
                 purchase_cost_cents = :purchase_cost_cents, starlink_account_email = :starlink_account_email,
                 starlink_account_password_enc = :starlink_account_password_enc,
+                wifi_ssid = :wifi_ssid, wifi_password_enc = :wifi_password_enc,
                 data_plan = :data_plan, billing_cycle_start_day = :billing_cycle_start_day,
                 subscription_payer = :subscription_payer,
                 current_storage_location_id = :current_storage_location_id, at_pickup_site = :at_pickup_site,
@@ -125,6 +135,27 @@ final class EquipmentService
         }
 
         $existingEnc = $existing['starlink_account_password_enc'] ?? null;
+
+        return ($existingEnc ?? '') !== '' ? (string) $existingEnc : null;
+    }
+
+    /** @param array<string, mixed> $data @param ?array<string, mixed> $existing */
+    private function resolveWifiPasswordEnc(array $data, ?array $existing): ?string
+    {
+        if (!empty($data['clear_wifi_password'])) {
+            return null;
+        }
+
+        $password = trim((string) ($data['wifi_password'] ?? ''));
+        if ($password !== '') {
+            return CredentialCipher::encrypt($password);
+        }
+
+        if ($existing === null) {
+            return null;
+        }
+
+        $existingEnc = $existing['wifi_password_enc'] ?? null;
 
         return ($existingEnc ?? '') !== '' ? (string) $existingEnc : null;
     }
@@ -404,6 +435,8 @@ final class EquipmentService
             'purchase_cost_cents' => (int) ($data['purchase_cost_cents'] ?? 0),
             'starlink_account_email' => ($data['starlink_account_email'] ?? '') !== '' ? (string) $data['starlink_account_email'] : null,
             'starlink_account_password_enc' => null,
+            'wifi_ssid' => ($data['wifi_ssid'] ?? '') !== '' ? trim((string) $data['wifi_ssid']) : null,
+            'wifi_password_enc' => null,
             'data_plan' => ($data['data_plan'] ?? '') !== '' ? (string) $data['data_plan'] : null,
             'billing_cycle_start_day' => !empty($data['billing_cycle_start_day']) ? (int) $data['billing_cycle_start_day'] : null,
             'subscription_payer' => $subscriptionPayer,
@@ -421,6 +454,8 @@ final class EquipmentService
             $fields['partner_id'] = null;
             $fields['starlink_account_email'] = null;
             $fields['starlink_account_password_enc'] = null;
+            $fields['wifi_ssid'] = null;
+            $fields['wifi_password_enc'] = null;
             $fields['data_plan'] = null;
             $fields['billing_cycle_start_day'] = null;
             $fields['subscription_payer'] = 'admin';
