@@ -12,6 +12,12 @@ $mailShipEnabled = (bool) config('customer_mail_ship_enabled', false);
 $defaultLocationId = isset($defaultLocationId)
     ? (int) $defaultLocationId
     : (!empty($locations) ? (int) $locations[0]['id'] : 0);
+$hideLocationDetails = ($calendarMode ?? 'checkout') === 'checkout';
+if (!isset($calendarLocations)) {
+    $calendarLocations = $hideLocationDetails
+        ? location_display()->calendarLocations($locations ?? [])
+        : location_display()->internalCalendarLocations($locations ?? []);
+}
 ?>
 <section class="home-section">
     <div class="section-heading" id="book">
@@ -30,12 +36,12 @@ $defaultLocationId = isset($defaultLocationId)
                 <label id="location-field">
                     <span>Location</span>
                     <select id="location-id">
-                        <?php foreach ($locations as $location): ?>
+                        <?php foreach ($calendarLocations as $location): ?>
                             <option
                                 value="<?= (int) $location['id'] ?>"
                                 <?= (int) $location['id'] === $defaultLocationId ? 'selected' : '' ?>
                             >
-                                <?= escape($location['name']) ?>
+                                <?= escape($location['name'] ?? '') ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -133,17 +139,8 @@ $defaultLocationId = isset($defaultLocationId)
         registerUrl: <?= json_encode(route_path('register'), JSON_THROW_ON_ERROR) ?>,
         csrfToken: <?= json_encode(csrf_token(), JSON_THROW_ON_ERROR) ?>,
         customerShippingProvince: <?= json_encode($customerShippingProvince ?? null, JSON_THROW_ON_ERROR) ?>,
-        locations: <?= json_encode(array_column(array_map(static fn (array $location): array => [
-            'id' => (int) $location['id'],
-            'name' => $location['name'],
-            'address' => $location['address'],
-            'city' => $location['city'],
-            'province' => $location['province'],
-            'location_type' => $location['location_type'] ?? 'store',
-            'pickup_instructions' => $location['pickup_instructions'] ?? null,
-            'latitude' => isset($location['latitude']) && is_numeric($location['latitude']) ? (float) $location['latitude'] : null,
-            'longitude' => isset($location['longitude']) && is_numeric($location['longitude']) ? (float) $location['longitude'] : null,
-        ], $locations), null, 'id'), JSON_THROW_ON_ERROR) ?>,
+        hideLocationDetails: <?= $hideLocationDetails ? 'true' : 'false' ?>,
+        locations: <?= json_encode($calendarLocations, JSON_THROW_ON_ERROR) ?>,
         prefill: <?= json_encode([
             'location_id' => (int) ($_GET['location_id'] ?? 0),
             'fulfillment_type' => (string) ($_GET['fulfillment_type'] ?? ''),

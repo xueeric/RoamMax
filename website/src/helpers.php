@@ -76,6 +76,13 @@ function now_utc(): string
     return gmdate('Y-m-d\TH:i:s\Z');
 }
 
+function location_display(): \Starlink\Services\LocationDisplayService
+{
+    static $service = null;
+
+    return $service ??= new \Starlink\Services\LocationDisplayService();
+}
+
 function format_pickup_time(string $value): string
 {
     if (!preg_match('/^(\d{1,2}):\d{2}$/', $value, $matches)) {

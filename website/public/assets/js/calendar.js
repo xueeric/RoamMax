@@ -234,22 +234,40 @@
             pickupInfo.appendChild(block);
         };
 
+        const locationName = location.name || location.city || 'Your area';
+        const preCheckoutNote = 'The exact address and pickup instructions are shared after you complete your booking.';
+
         if (isPickup()) {
             const isHome = location.location_type === 'home';
-            appendBlock('location-pickup-info-label', isHome ? 'Pickup (appointment)' : 'Pickup location');
-            appendBlock('location-pickup-info-name', location.name || '');
-            appendBlock('location-pickup-info-address', location.address || '');
-            appendBlock(
-                'location-pickup-info-instructions',
-                location.pickup_instructions || (isHome ? 'At checkout, choose your preferred pickup time. We will try to accommodate at our best.' : ''),
-            );
+            if (config.hideLocationDetails) {
+                appendBlock('location-pickup-info-label', isHome ? 'Pickup (appointment)' : 'Pickup location');
+                appendBlock('location-pickup-info-name', locationName);
+                appendBlock(
+                    'location-pickup-info-instructions',
+                    isHome
+                        ? `Choose your preferred pickup time at checkout. ${preCheckoutNote}`
+                        : preCheckoutNote,
+                );
+            } else {
+                appendBlock('location-pickup-info-label', isHome ? 'Pickup (appointment)' : 'Pickup location');
+                appendBlock('location-pickup-info-name', location.name || '');
+                appendBlock('location-pickup-info-address', location.address || '');
+                appendBlock(
+                    'location-pickup-info-instructions',
+                    location.pickup_instructions || (isHome ? 'At checkout, choose your preferred pickup time. We will try to accommodate at our best.' : ''),
+                );
+            }
         } else if (isCityDelivery()) {
             appendBlock('location-pickup-info-label', 'Local delivery area');
-            appendBlock('location-pickup-info-name', `${location.city || location.name} · within ${cityDeliveryRadiusKm} km`);
-            appendBlock('location-pickup-info-address', location.address || '');
+            appendBlock('location-pickup-info-name', `${locationName} · within ${cityDeliveryRadiusKm} km`);
+            if (!config.hideLocationDetails) {
+                appendBlock('location-pickup-info-address', location.address || '');
+            }
             appendBlock(
                 'location-pickup-info-instructions',
-                `Delivery fee ${formatMoney(cityDeliveryFeeCents)}. We deliver from units staged in ${location.city || 'this city'}.`,
+                config.hideLocationDetails
+                    ? `Delivery fee ${formatMoney(cityDeliveryFeeCents)}. We deliver from units staged in ${location.city || locationName}.`
+                    : `Delivery fee ${formatMoney(cityDeliveryFeeCents)}. We deliver from units staged in ${location.city || 'this city'}.`,
             );
         } else if (isMailShipping()) {
             appendBlock('location-pickup-info-label', 'Mail shipping');
@@ -259,7 +277,9 @@
             );
             appendBlock(
                 'location-pickup-info-instructions',
-                `Your selected location (${location.name}) is for reference only. Availability is checked across all hubs.`,
+                config.hideLocationDetails
+                    ? `Your selected area (${locationName}) is for reference only. Availability is checked across all hubs.`
+                    : `Your selected location (${location.name}) is for reference only. Availability is checked across all hubs.`,
             );
         } else {
             pickupInfo.hidden = true;
