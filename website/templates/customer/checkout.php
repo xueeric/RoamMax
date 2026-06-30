@@ -23,7 +23,6 @@ $fulfillmentLabel = match ($fulfillmentType) {
     'pickup_appointment', 'pickup', 'home_appointment', 'store_pickup' => 'Pickup',
     default => str_replace('_', ' ', $fulfillmentType),
 };
-$cityDeliveryRadiusKm = (int) pricing_config('city_delivery_radius_km', 50);
 $pickupInfo = location_display()->preCheckoutPickupInfo($location, $fulfillmentType);
 ?>
 <div class="micro-label">03. Checkout & Agreement</div>
